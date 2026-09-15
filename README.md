@@ -10,7 +10,9 @@
 | --- | --- |
 | `data/policy_modumall.md` | 상담원 업무 매뉴얼 v2.0 (13,627자 / 14개 장) |
 | `data/mockdata_modumall.json` | 어드민 목데이터 (상품 20 · 주문 11 · 반품 5) |
-| `data/agent_routing_goldenset.csv` | 라우팅 정답셋 160건 (평가 120 / few-shot 40) |
+| `data/customer_inquiries.csv` | 고객 문의 160건 — **라우트 정답은 들어 있지 않다** |
+| `data/routing_answers.csv` | 라우팅 평가 정답 (qa_id · route · split) — 채점할 때만 연다 |
+| `data/agent_routing_goldenset.csv` | 위 둘을 합쳐 둔 형태 (구버전 교안 호환용) |
 | `data/hard_cases.csv` | 경계 사례 72건 (6개 유형) |
 | `data/answer_goldenset_multiturn.json` | 멀티턴 답변 정답셋 (34개 대화 · 56 에이전트 턴) |
 
@@ -21,7 +23,7 @@ import urllib.request, pathlib
 
 BASE_URL = "https://raw.githubusercontent.com/88chacha/modumall-agent-data/main/data/"
 FILES = ("policy_modumall.md", "mockdata_modumall.json",
-         "agent_routing_goldenset.csv", "hard_cases.csv",
+         "customer_inquiries.csv", "routing_answers.csv", "hard_cases.csv",
          "answer_goldenset_multiturn.json")
 for f in FILES:
     if not pathlib.Path(f).exists():
@@ -31,7 +33,11 @@ for f in FILES:
 
 ## 정답셋은 어떻게 만들었나
 
-`agent_routing_goldenset.csv` 와 `hard_cases.csv` 의 고객 발화는 **직접 저작한 합성 문장**입니다
+**문의와 정답을 나눠 두었습니다.** `customer_inquiries.csv` 에는 고객 문의와 원본 라벨(`category`)만
+들어 있고 라우트 정답은 없습니다. 라우트는 교안에서 직접 설계하는 대상이고, 정답을 보면서 분류기를
+만들면 설계가 아니라 베끼기가 되니까요. 채점용 정답은 `routing_answers.csv` 에 따로 있습니다.
+
+고객 발화는 **직접 저작한 합성 문장**입니다
 (`provenance=합성`). 실제 상담 데이터를 그대로 싣는 대신, 실제 발화에서 관찰한 **성질**을
 재현하도록 썼습니다.
 

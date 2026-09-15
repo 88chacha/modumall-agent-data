@@ -17,7 +17,7 @@
 ```python
 import urllib.request, pathlib
 
-BASE_URL = "https://raw.githubusercontent.com/OWNER/REPO/main/data/"
+BASE_URL = "https://raw.githubusercontent.com/88chacha/modumall-agent-data/main/data/"
 for f in ("policy_modumall.md", "mockdata_modumall.json", "answer_goldenset_multiturn.json"):
     if not pathlib.Path(f).exists():
         urllib.request.urlretrieve(BASE_URL + f, f)
